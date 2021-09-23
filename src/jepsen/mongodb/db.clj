@@ -25,8 +25,7 @@
 (def subpackages
   "MongoDB has like five different packages to install; these are the ones we
   want."
-  ["mongos"
-   "server"])
+  [])
 
 (defn deb-url
   "What's the URL of the Debian package we install?"
