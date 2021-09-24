@@ -97,10 +97,10 @@
   {:_id (:replica-set-name test "rs_jepsen")
    :configsvr (config-server? test)
    ; See https://docs.mongodb.com/manual/reference/replica-configuration/#rsconf.settings.catchUpTimeoutMillis
-   :settings {:heartbeatTimeoutSecs       1
-              :electionTimeoutMillis      1000
-              :catchUpTimeoutMillis       1000
-              :catchUpTakeoverDelayMillis 3000}
+   :settings {:heartbeatTimeoutSecs       10
+              :electionTimeoutMillis      10000
+              :catchUpTimeoutMillis       10000
+              :catchUpTakeoverDelayMillis 30000}
    :members (->> test
                  :nodes
                  (map-indexed (fn [i node]
@@ -229,7 +229,6 @@
   (reify
     db/DB
     (setup! [db test node]
-      (install! test)
       (configure! test node)
       (start! test node)
       (join! test node))
