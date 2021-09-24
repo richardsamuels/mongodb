@@ -57,16 +57,16 @@
         (applyToClusterSettings (with-block builder
                                   (.. builder
                                       (hosts [(ServerAddress. node port)])
-                                      (serverSelectionTimeout 1 TimeUnit/SECONDS))))
+                                      (serverSelectionTimeout 5 TimeUnit/SECONDS))))
         (applyToSocketSettings (with-block builder
                                  (.. builder
-                                     (connectTimeout 5 TimeUnit/SECONDS)
-                                     (readTimeout    5 TimeUnit/SECONDS))))
+                                     (connectTimeout 10 TimeUnit/SECONDS)
+                                     (readTimeout    10 TimeUnit/SECONDS))))
         (applyToConnectionPoolSettings (with-block builder
                                          (.. builder
                                              (minSize 1)
                                              (maxSize 1)
-                                             (maxWaitTime 1 TimeUnit/SECONDS))))
+                                             (maxWaitTime 2 TimeUnit/SECONDS))))
         build)))
 
 (defn await-open
