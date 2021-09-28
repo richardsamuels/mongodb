@@ -80,7 +80,7 @@
              (or (try
                    (let [conn (open node port)]
                      (try
-                       (.first (.listDatabaseNames conn))
+                       (.runCommand (.getDatabase conn "admin") (new Document "hello" 1))
                        conn
                        ; Don't leak clients when they fail
                        (catch Throwable t
