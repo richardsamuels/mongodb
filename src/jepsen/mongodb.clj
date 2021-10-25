@@ -3,6 +3,7 @@
   (:require [clojure.tools.logging :refer [info warn]]
             [clojure [string :as str]
                      [pprint :refer [pprint]]]
+            [elle [txn :as txn]]
             [jepsen [cli :as cli]
                     [checker :as checker]
                     [tests :as tests]
@@ -168,13 +169,21 @@
     (->> (all-test-options cli nemeses workloads)
          (map test-fn))))
 
+(def cycle-search-timeout
+  "How long, in milliseconds, to look for a certain cycle in any given SCC.
+  This overrides the value defined in elle/txn."
+  1)
+
 (defn -main
   "Handles command line arguments. Can either run a test, or a web server for
   browsing results."
   [& args]
-  (cli/run! (merge (cli/single-test-cmd {:test-fn  mongodb-test
-                                         :opt-spec cli-opts})
-                   (cli/test-all-cmd {:tests-fn (partial all-tests mongodb-test)
-                                      :opt-spec cli-opts})
-                   (cli/serve-cmd))
-            args))
+  ; override elle/txn/cycle-search-timeout with our local version, which 10x's
+  ; the timeout value
+  (with-redefs [txn/cycle-search-timeout cycle-search-timeout]
+    (cli/run! (merge (cli/single-test-cmd {:test-fn  mongodb-test
+                                           :opt-spec cli-opts})
+                     (cli/test-all-cmd {:tests-fn (partial all-tests mongodb-test)
+                                        :opt-spec cli-opts})
+                     (cli/serve-cmd))
+              args)))
