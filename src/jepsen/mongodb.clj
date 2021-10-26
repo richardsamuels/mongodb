@@ -172,7 +172,7 @@
 (def cycle-search-timeout
   "How long, in milliseconds, to look for a certain cycle in any given SCC.
   This overrides the value defined in elle/txn."
-  1)
+  10000)
 
 (defn -main
   "Handles command line arguments. Can either run a test, or a web server for
